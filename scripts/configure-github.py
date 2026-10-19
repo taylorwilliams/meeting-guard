@@ -12,10 +12,10 @@ DEFAULT_REPO = "taylorwilliams/meeting-guard"
 
 
 def settings_plan(repo, info):
-    owner = repo.split("/")[0]
+    if info.get("owner", {}).get("type", "User") != "User":
+        raise ValueError("This policy is for a personally owned repository.")
     protection = json.loads((ROOT / ".github/branch-protection.json").read_text())
-    if protection["required_pull_request_reviews"]["bypass_pull_request_allowances"]["users"] != [owner]:
-        raise ValueError("Protection configuration must identify this repository's owner.")
+    reviews = json.loads((ROOT / ".github/review-ruleset.json").read_text())
     base = "repos/" + repo
     plan = [
         ("Repository settings", "PATCH", base, {
@@ -36,6 +36,7 @@ def settings_plan(repo, info):
         ("Dependency alerts", "PUT", base + "/vulnerability-alerts", None),
         ("Dependency security updates", "PUT", base + "/automated-security-fixes", None),
         ("Main branch protection", "PUT", base + "/branches/main/protection", protection),
+        ("Code-owner review rule", "UPSERT_RULESET", base + "/rulesets", reviews),
     ]
     if not info["private"]:
         plan.extend([
@@ -64,6 +65,19 @@ def api(method, path, body=None):
     return json.loads(result.stdout) if result.stdout.strip() else {}
 
 
+def apply_setting(method, path, body):
+    if method != "UPSERT_RULESET":
+        return api(method, path, body)
+    # Update our existing rule on repeat runs rather than creating duplicates.
+    existing = api("GET", path + "?includes_parents=false")
+    matches = [rule for rule in existing if rule["name"] == body["name"]]
+    if len(matches) > 1:
+        raise RuntimeError("Multiple matching review rules exist; resolve duplicates before applying.")
+    if matches:
+        return api("PUT", path + "/" + str(matches[0]["id"]), body)
+    return api("POST", path, body)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", default=DEFAULT_REPO)
@@ -82,7 +96,7 @@ def main():
             print("Planned: " + label)
             continue
         try:
-            api(method, path, body)
+            apply_setting(method, path, body)
             print("Applied: " + label)
         except RuntimeError as error:
             pending.append(label + ": " + str(error))
