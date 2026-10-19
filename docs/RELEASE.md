@@ -10,6 +10,8 @@ GitHub Free does not provide enforced branch protection on private personal repo
 
 The policy requires pull requests with one code-owner approval, passing **Build and test** and **Repository checks** jobs from GitHub Actions, up-to-date branches and resolved review conversations. It enforces linear history and blocks force pushes and branch deletion, including for administrators. The owner alone may bypass the review requirement, allowing them to merge their own pull requests; checks still apply. Only squash merges are enabled and merged branches are deleted automatically.
 
+Branch protection enforces pull requests, checks and branch restrictions. A separate review ruleset requires code-owner approval and lets the personal repository's owner bypass review when merging a pull request. That exemption does not bypass branch protection. The configuration script updates the existing review ruleset on repeat runs.
+
 Public contributors can fork and open pull requests without write access. All outside-contributor workflow runs require maintainer approval once the public settings are applied. Workflow tokens are read-only, checkouts do not retain credentials, actions must use full commit hashes, and only GitHub-owned actions are allowed. No pull-request workflow has signing keys or release secrets.
 
 The public configuration also enables private vulnerability reporting, secret scanning and secret push protection. Dependency alerts and automated security updates are enabled where supported. Dependabot proposes updates to pinned workflow actions; these still require review.
