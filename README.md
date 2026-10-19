@@ -19,12 +19,19 @@ Meeting Guard shows a full-screen reminder and plays a loud, repeating alert. Se
 
 [View a full-screen meeting alert](docs/images/full-screen-alert.png). All screenshots use fictional events.
 
+## Before you start
+
+- A Mac running **macOS 14 or later**.
+- The full [Xcode](https://developer.apple.com/xcode/) app, version 16 or later. Choose a version [compatible with your macOS version](https://developer.apple.com/xcode/system-requirements), then open it once and complete its setup.
+- For calendar alerts, your events must already appear in **macOS Calendar**. Add your existing iCloud, Google or Microsoft Exchange account there first. Personal reminders work without a calendar account.
+
+For Microsoft 365 work or school accounts, your organisation must allow **Apple Internet Accounts** to connect. You do not need to create an Azure tenant or register a Meeting Guard enterprise app. Follow the [calendar account and IT approval steps](docs/SETUP.md#connect-a-calendar-account) before building.
+
 ## Install from source
 
-Meeting Guard runs on **macOS 14 or later**. There is no ready-to-install download yet.
+There is no ready-to-install download yet. With the prerequisites above in place:
 
-1. Install [Xcode](https://developer.apple.com/xcode/) 16 or later. Choose a version [compatible with your macOS version](https://developer.apple.com/xcode/system-requirements). Open Xcode once and complete its setup.
-2. Open Terminal and run these lines in order:
+1. Open Terminal and run these lines in order:
 
    ```sh
    git clone https://github.com/taylorwilliams/meeting-guard.git
@@ -33,7 +40,7 @@ Meeting Guard runs on **macOS 14 or later**. There is no ready-to-install downlo
    open dist
    ```
 
-3. When the build finishes, Finder opens the `dist` folder. Drag **Meeting Guard.app** into **Applications**, then open it there.
+2. When the build finishes, Finder opens the `dist` folder. Drag **Meeting Guard.app** into **Applications**, then open it there.
 
 If you are updating, quit Meeting Guard before replacing the app.
 

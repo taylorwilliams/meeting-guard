@@ -1,5 +1,24 @@
 # Setup help
 
+## Connect a calendar account
+
+1. Open **Calendar** on your Mac and choose **Calendar → Add Account**.
+2. Choose your provider. For a Microsoft 365 work or school account, choose **Microsoft Exchange**.
+3. Sign in with your existing account and follow your organisation's sign-in prompts.
+4. Check that **Calendars** is enabled for the account under **System Settings → Internet Accounts**.
+5. Wait until your events appear in macOS Calendar. Meeting Guard can only read calendars available there; an account connected only in Outlook is not enough.
+6. Open Meeting Guard, click **Connect Calendars** and allow full calendar access. Choose the calendars to watch under **Settings → Calendars**.
+
+See [Apple's calendar account instructions](https://support.apple.com/guide/calendar/icl4308d6701/mac).
+
+### Microsoft 365 work and school accounts
+
+Use your organisation's existing account. Meeting Guard reads the calendars available on your Mac through Apple's EventKit API. It does not ask you to create an Azure tenant, register a Meeting Guard enterprise app, or supply a client ID or secret.
+
+If Microsoft asks for administrator approval, contact your IT team. They may need to approve **Apple Internet Accounts** in your existing Microsoft Entra tenant, depending on the organisation's [app consent policies](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/manage-app-consent-policies). Meeting Guard cannot change those policies.
+
+**Exchange sync changes from October 2026:** Apple reports that Exchange Online's EWS retirement can stop macOS Calendar from signing in or syncing. If this affects your account, ask your Exchange administrator to follow [Apple's current Exchange guidance](https://support.apple.com/en-us/149092) and its linked Microsoft instructions. Check that syncing works in macOS Calendar before setting up Meeting Guard.
+
 ## The build cannot find Swift 6 or the macOS SDK
 
 Install the full Xcode app, open it once and complete its setup. The standalone Command Line Tools may point to an older toolchain.
