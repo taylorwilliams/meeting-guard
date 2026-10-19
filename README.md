@@ -52,7 +52,7 @@ The build creates an app for your Mac's processor. You do not need a paid Apple 
 2. **Choose when alerts appear.** Open **Settings → Alerts**, enter the minutes before each event and click **Apply**. For example, `5, 1, 0` gives alerts five minutes before, one minute before and at the start.
 3. **Set the sound.** Choose a sound, volume and **Playback** option: **Play once**, **Repeat until answered** or **Repeat for a set time**. New settings use Foghorn for two minutes. Choose a volume you can hear when you step away from your desk. Dismissing, snoozing or joining stops the sound.
 4. **Try an alert.** In the same tab, scroll down and click **Try a sample full-screen alert**. Press **Esc** or click **Dismiss** to close it.
-5. **Start it at login.** In **Settings → General**, switch on **Launch Meeting Guard at login** if you want it to start automatically.
+5. **Start it at login.** Open the copy in **Applications**, then switch on **Launch Meeting Guard at login** under **Settings → General**. It will start when you sign in to your Mac. See [startup help](docs/SETUP.md#start-automatically-at-login) to check the login item.
 
 Keep the app running to receive alerts. Closing its window leaves it in the menu bar; quitting stops alerts. Your Mac must be awake.
 
