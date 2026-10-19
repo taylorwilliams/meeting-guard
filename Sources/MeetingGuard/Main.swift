@@ -32,6 +32,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var settingsWindow: NSWindow?
     private var presenter: AlertPresenter!
     private var subscriptions: Set<AnyCancellable> = []
+    private var automationRateLimit = AutomationRateLimit()
+    private var externalPromptVisible = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         configureMenu()
@@ -61,11 +63,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
-        for url in urls.prefix(8) {
-            if let event = DeepLink.alert(from: url, now: Date()) {
-                state.acceptExternal(event)
-            }
-        }
+        guard state.settings.automationLinksEnabled == true, !state.isPaused,
+              !externalPromptVisible, state.canAcceptExternal,
+              let event = urls.prefix(8).lazy.compactMap({ DeepLink.alert(from: $0, now: Date()) }).first,
+              automationRateLimit.allow(at: ProcessInfo.processInfo.systemUptime) else { return }
+        externalPromptVisible = true
+        defer { externalPromptVisible = false }
+        let prompt = NSAlert()
+        prompt.messageText = "Show an external reminder?"
+        prompt.informativeText = "A link from another app or website wants to display a full-screen reminder with sound:\n\n" + String(event.title.prefix(120))
+        prompt.addButton(withTitle: "Cancel")
+        prompt.addButton(withTitle: "Show Reminder")
+        NSApp.activate(ignoringOtherApps: true)
+        guard prompt.runModal() == .alertSecondButtonReturn else { return }
+        state.acceptExternal(event)
     }
 
     @objc private func togglePopover() {

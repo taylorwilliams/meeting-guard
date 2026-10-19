@@ -61,6 +61,7 @@ public struct GuardSettings: Codable, Equatable, Sendable {
     public var privacyMode = false
     public var showMenuCountdown = true
     public var pausedUntil: Date?
+    public var automationLinksEnabled: Bool?
 
     public init() {}
 

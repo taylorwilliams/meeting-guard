@@ -88,6 +88,7 @@ final class AppState: ObservableObject {
     var snoozedCount: Int { scheduler.ledger.snoozed.count }
     var snoozedTickets: [AlertTicket] { scheduler.ledger.snoozed.values.sorted { $0.scheduled < $1.scheduled } }
     var dataPath: String { store.url.path }
+    var canAcceptExternal: Bool { externalEvents.filter { $0.end > Date() }.count < 5 }
 
     func connectCalendar() {
         guard !requestingAccess else { return }
@@ -149,12 +150,17 @@ final class AppState: ObservableObject {
 
     func dismiss(_ ticket: AlertTicket) {
         scheduler.dismiss(ticket.event, now: now)
+        if ticket.event.id.hasPrefix("external:") {
+            externalEvents.removeAll { $0.id == ticket.event.id }
+            rebuildEvents()
+        }
         persist()
     }
 
     func isDismissed(_ event: GuardEvent) -> Bool { scheduler.ledger.dismissed[event.id] != nil }
 
     func acceptExternal(_ event: GuardEvent) {
+        guard canAcceptExternal else { return }
         externalEvents.append(event)
         rebuildEvents()
         tick()
