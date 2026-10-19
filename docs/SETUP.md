@@ -31,6 +31,17 @@ sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
 Use your actual Xcode path if you installed it elsewhere. Then run `./scripts/build-app.sh` again from the repository folder.
 
+## Start automatically at login
+
+1. Quit Meeting Guard if it is running from the build folder.
+2. Move **Meeting Guard.app** from `dist` into **Applications**, then open it from Applications.
+3. In Meeting Guard, open **Settings → General** and switch on **Launch Meeting Guard at login**.
+4. Check **System Settings → General → Login Items & Extensions**. Meeting Guard should appear under **Open at Login**. On older macOS versions, this page is called **Login Items**.
+
+Meeting Guard starts when you sign in after a restart. You do not need to add it again using the **+** button in System Settings.
+
+If it does not start, open the copy in Applications and turn its launch-at-login switch off and on again. Keep the app in Applications so the login item can find it.
+
 ## Calendar access is off
 
 Open **System Settings → Privacy & Security → Calendars** and allow full access for Meeting Guard. Reopen the app from Applications.
