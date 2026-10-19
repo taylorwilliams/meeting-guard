@@ -28,7 +28,7 @@ struct SettingsView: View {
                     let url = try result.get()
                     let granted = url.startAccessingSecurityScopedResource()
                     defer { if granted { url.stopAccessingSecurityScopedResource() } }
-                    let document = try JSONDecoder().decode(ThemeFile.self, from: Data(contentsOf: url))
+                    let document = try JSONDecoder().decode(ThemeFile.self, from: BoundedFile.read(url, limit: 65_536))
                     guard document.format == "MeetingGuardTheme", document.version == 1 else { throw CocoaError(.fileReadCorruptFile) }
                     state.settings.theme = document.theme
                 } catch { state.error = "Theme could not be imported: \(error.localizedDescription)" }
@@ -174,6 +174,8 @@ struct SettingsView: View {
         Form {
             Section {
                 Toggle("Launch Meeting Guard at login", isOn: Binding(get: { state.launchAtLogin }, set: { state.setLogin($0) }))
+                Toggle("Allow automation links", isOn: Binding(get: { state.settings.automationLinksEnabled == true }, set: { state.settings.automationLinksEnabled = $0 }))
+                Text("Off by default. Automation links can come from websites or other apps. Each reminder requires your confirmation before it can interrupt the screen or play sound.").font(.caption).foregroundStyle(.secondary)
                 Text("Keep the app running in your menu bar to receive alerts. This Mac cannot show alerts while asleep or powered off.").font(.caption).foregroundStyle(.secondary)
             }
             Section("About Meeting Guard") {

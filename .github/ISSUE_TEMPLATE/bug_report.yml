@@ -1,0 +1,19 @@
+name: Bug report
+description: Report a reproducible problem using fictional calendar data.
+body:
+  - type: markdown
+    attributes:
+      value: For security vulnerabilities, use the repository's private reporting channel. Never attach calendar databases, state.json, credentials or screenshots containing private events.
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: What happened?
+      description: Include what you expected and steps to reproduce with sample data.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App and macOS versions
+    validations:
+      required: true

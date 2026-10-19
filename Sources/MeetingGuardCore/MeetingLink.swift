@@ -9,7 +9,8 @@ public enum MeetingLink {
     ]
 
     public static func safeWebURL(_ url: URL) -> Bool {
-        ["https", "http"].contains(url.scheme?.lowercased() ?? "") && url.host != nil && url.user == nil && url.password == nil
+        url.scheme?.lowercased() == "https" && url.host?.isEmpty == false &&
+            (url.port == nil || url.port == 443) && url.user == nil && url.password == nil
     }
 
     public static func find(in fields: [String]) -> URL? {

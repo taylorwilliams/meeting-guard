@@ -45,3 +45,9 @@ The connection flow now reports unsuccessful requests, prevents duplicate reques
 ### Foghorn and sound repetition
 
 Playback now supports Play once, Repeat until answered, and Repeat for a set time. Timed playback uses a monotonic clock independently of window redraws. Added tests cover the two-minute deadline, custom duration, indefinite playback, immediate stop, disabled sound, unavailable audio, compatibility with old saved settings, and saving the new modes. The original foghorn waveform is also decoded with Apple's audio API and checked for duration, low frequencies, a quiet gap and unclipped samples. Air Raid Siren is decoded and tested for rising/falling pitch and unclipped samples; Pulse Horn is decoded and tested for four steady blasts with quiet gaps. Deep Bass Pulse is decoded and tested for low-frequency energy and four slower blasts. The suite now contains 34 tests.
+
+### Public-release hardening
+
+The Swift suite now has 41 tests, adding disabled-by-default automation, malformed and oversized links, prompt rate limiting, HTTPS-only meeting links, bounded imports, private state-directory permissions and symlink rejection. Three Python tests validate the repository policy, including that it cannot publish the repository or add collaborators. Local Actionlint, Gitleaks source/history scans, release compilation and signed-bundle verification passed. GitHub CI separately checks the older supported Swift toolchain.
+
+To check automation manually, leave automation links disabled and open a test URL; no full-screen alert should appear. Enable the option in General settings, open a fictional reminder URL and verify Cancel leaves the screen alone. Show Reminder should display the alert. Repeated requests within ten seconds and further requests while confirmation is open should not create more dialogs.

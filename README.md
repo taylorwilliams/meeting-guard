@@ -35,9 +35,9 @@ Quit an existing instance before switching to demo mode. Other launch arguments:
 - Three original alert palettes, palette import/export, privacy mode, original Foghorn, Air Raid Siren, Pulse Horn and Deep Bass Pulse tones, system sounds and volume control.
 - Sound playback choices: play once, repeat until answered, or repeat for a configurable duration (1 second to 24 hours). New settings default to a foghorn repeating for 2 minutes.
 - Launch at login through macOS's supported ServiceManagement API.
-- Local automation URL: `meetingguard://alert?title=Take%20a%20break&notes=Stand%20up`.
+- Optional automation URL: `meetingguard://alert?title=Take%20a%20break&notes=Stand%20up`. Enable automation links in General settings first; each request requires confirmation.
 
-Meeting links currently include Google Meet, Zoom and Zoom Government, Teams, Webex, GoTo, Whereby, Jitsi, FaceTime, Chime, RingCentral, 8x8, join.me, Discord, Slack, Zoho, Doxy.me, Cal.com and Proton Meet. Links use HTTP(S) and open through the default handler. The app rejects executable URL schemes, embedded credentials and lookalike domain suffixes. Meeting Guard never opens a call automatically.
+Meeting links currently include Google Meet, Zoom and Zoom Government, Teams, Webex, GoTo, Whereby, Jitsi, FaceTime, Chime, RingCentral, 8x8, join.me, Discord, Slack, Zoho, Doxy.me, Cal.com and Proton Meet. Links use HTTPS and open through the default handler. The app rejects executable URL schemes, embedded credentials and lookalike domain suffixes. Meeting Guard never opens a call automatically.
 
 ## Delivery behaviour
 
@@ -55,7 +55,7 @@ Pause and work hours apply to personal reminders too. Alerts that become due whi
 
 ## Privacy
 
-Calendar events are read locally through EventKit. The OS grants full calendar access because that is the permission Apple provides for reading; this app does not create, edit or delete calendar events. No analytics, ads, accounts, servers or network synchronisation are implemented. Only clicking a meeting link opens an external service.
+Calendar events are read locally through EventKit. The OS grants full calendar access because that is the permission Apple provides for reading; this app does not create, edit or delete calendar events. No analytics, ads, accounts, servers or network synchronisation are implemented. Only clicking a meeting link opens an external service. Automation links are disabled by default, require confirmation when enabled, allow at most one prompt per ten seconds and five pending external reminders. Imported palettes are limited to 64 KiB.
 
 Settings and personal reminders are stored in `~/Library/Application Support/MeetingGuard/state.json`. Pending snoozes include the event details needed to restore the alert. Delivery and dismissal records contain occurrence identifiers and timestamps; records expire after eight days. The state directory and file are created with owner-only permissions. Data is not separately encrypted; normal macOS account and disk protections apply. An unreadable or future-version state file is preserved and writes are disabled for that run.
 
@@ -79,3 +79,7 @@ swift test
 The script builds for the current Mac's architecture. Set `CONFIGURATION=debug` for a development bundle. `SIGNING_IDENTITY` can specify your own Developer ID certificate. Public binary distribution additionally needs your own Developer ID signing and notarisation; the default local signature is not notarised. A stable Developer ID signature also avoids calendar approval being tied to changing ad-hoc builds. CI builds and tests on macOS but does not publish binaries.
 
 Manual acceptance steps are in [docs/TESTING.md](docs/TESTING.md). Licensed under [MIT](LICENSE).
+
+## Contributing and security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for pull requests, [SECURITY.md](SECURITY.md) for private vulnerability reports and [docs/RELEASE.md](docs/RELEASE.md) for repository protections and signed binary releases. The repository-policy script never changes visibility. GitHub plan restrictions can leave protection pending while the repository is private; the script reports this explicitly.

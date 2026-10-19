@@ -20,7 +20,16 @@ final class CalendarService {
         return status == .denied || status == .restricted || status == .writeOnly
     }
 
-    func requestAccess() async throws -> Bool { try await store.requestFullAccessToEvents() }
+    func requestAccess() async throws -> Bool {
+        // The completion API keeps the event store on this actor on Swift 6.0,
+        // whose SDK doesn't annotate the async API's isolation correctly.
+        try await withCheckedThrowingContinuation { continuation in
+            store.requestFullAccessToEvents { granted, error in
+                if let error { continuation.resume(throwing: error) }
+                else { continuation.resume(returning: granted) }
+            }
+        }
+    }
 
     func refresh(now: Date) -> (calendars: [CalendarInfo], events: [GuardEvent]) {
         guard authorized else { sourceEvents = [:]; return ([], []) }

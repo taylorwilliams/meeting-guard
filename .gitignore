@@ -3,3 +3,13 @@ dist/
 .DS_Store
 .swiftpm/
 *.xcuserstate
+.env
+.env.*
+!.env.example
+*.p12
+*.pfx
+*.pem
+*.key
+*.mobileprovision
+*.log
+__pycache__/
