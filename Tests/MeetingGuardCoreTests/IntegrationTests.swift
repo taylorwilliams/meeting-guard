@@ -12,6 +12,16 @@ import Testing
     #expect(MeetingLink.find(in: ["<a href=\"https://teams.microsoft.com/l/meetup-join/123\">Join meeting</a>"])?.host == "teams.microsoft.com")
 }
 
+@Test func meetingLinksIgnoreOutlookSafeLinksAppendedWithoutSpace() {
+    let safeLink = "https://eur01.safelinks.protection.outlook.com/ap/t-59584e83/?url=https%3A%2F%2Fexample&data=05%7C02&reserved=0"
+    let teams = "Join the meeting now<https://teams.microsoft.com/meet/123456789?p=AbCdEf<\(safeLink)>\r\nMeeting ID: 123 456 789"
+    #expect(MeetingLink.find(in: [teams])?.absoluteString == "https://teams.microsoft.com/meet/123456789?p=AbCdEf")
+    let zoom = "https://us02web.zoom.us/j/81234567890?pwd=aBcDeF.1<\(safeLink)>\r\n"
+    #expect(MeetingLink.find(in: [zoom])?.absoluteString == "https://us02web.zoom.us/j/81234567890?pwd=aBcDeF.1")
+    #expect(MeetingLink.find(in: ["Click here to join the meeting<https://teams.live.com/meet/987654321?p=XyZ>"])?.absoluteString
+        == "https://teams.live.com/meet/987654321?p=XyZ")
+}
+
 @Test func weekdayRemindersSkipWeekends() {
     var calendar = Calendar(identifier: .gregorian); calendar.timeZone = TimeZone(identifier: "Europe/London")!
     let from = ISO8601DateFormatter().date(from: "2026-10-23T09:00:00+01:00")!

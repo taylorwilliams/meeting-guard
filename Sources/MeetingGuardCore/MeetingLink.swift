@@ -17,7 +17,11 @@ public enum MeetingLink {
         guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else { return nil }
         for field in fields {
             // Calendar descriptions often contain HTML anchors and entity-escaped query parameters.
+            // Outlook also appends a Safe Links copy straight after each link, as `url<safelink>`.
+            // Angle brackets are never valid in a URL, so treat them as separators; otherwise the
+            // detector joins both links into one invalid URL.
             let text = field.replacingOccurrences(of: "&amp;", with: "&")
+                .replacingOccurrences(of: "<", with: " ").replacingOccurrences(of: ">", with: " ")
             for match in detector.matches(in: text, range: NSRange(text.startIndex..., in: text)) {
                 guard let raw = match.url, safeWebURL(raw), let host = raw.host?.lowercased() else { continue }
                 if hosts.contains(where: { host == $0 || host.hasSuffix("." + $0) }) { return raw }
